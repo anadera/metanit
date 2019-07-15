@@ -11,6 +11,7 @@ namespace BankApplication
     {
         static void Main(string[] args)
         {
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
             Bank<Account> bank = new Bank<Account>("SEB");
             bool alive = true;
             while (alive)
