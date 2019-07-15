@@ -60,19 +60,72 @@ namespace BankApplication
 
         private static void OpenAccount(Bank<Account> bank)
         {
+            Console.WriteLine("Укажите сумму для создания счета:");
 
+            decimal sum = Convert.ToDecimal(Console.ReadLine());
+            Console.WriteLine("Выберите тип счета: 1. До востребования 2. Депозит");
+            AccountType accountType;
+
+            int type = Convert.ToInt32(Console.ReadLine());
+
+            if (type == 2)
+                accountType = AccountType.Deposit;
+            else
+                accountType = AccountType.Ordinary;
+
+            bank.Open(accountType,
+                sum,
+                AddSumHandler,
+                WithdrawSumHandler,
+                (o, e) => Console.WriteLine(e.Message),
+                CloseAccountHandler,
+                OpenAccountHandler);
         }
         private static void Withdraw(Bank<Account> bank)
         {
+            Console.WriteLine("Укажите сумму для вывода со счетв:");
 
+            decimal sum = Convert.ToDecimal(Console.ReadLine());
+            Console.WriteLine("Введите id счета:");
+            int id = Convert.ToInt32(Console.ReadLine());
+
+            bank.Withdraw(sum, id);
         }
         private static void Put(Bank<Account> bank)
         {
-
+            Console.WriteLine("Укажите сумму, чтобы положить на счет:");
+            decimal sum = Convert.ToDecimal(Console.ReadLine());
+            Console.WriteLine("Введите id счета:");
+            int id = Convert.ToInt32(Console.ReadLine());
+            bank.Put(sum, id);
         }
         private static void CloseAccount(Bank<Account> bank)
         {
+            Console.WriteLine("Введите id счета, который надо закрыть:");
+            int id = Convert.ToInt32(Console.ReadLine());
+            bank.Close(id);
+        }
 
+        private static void OpenAccountHandler(object sender, AccountEventArgs e)
+        {
+            Console.WriteLine(e.Message);
+        }
+
+        private static void AddSumHandler(object sender, AccountEventArgs e)
+        {
+            Console.WriteLine(e.Message);
+        }
+
+        private static void WithdrawSumHandler(object sender, AccountEventArgs e)
+        {
+            Console.WriteLine(e.Message);
+            if (e.Sum > 0)
+                Console.WriteLine("Идем тратить деньги");
+        }
+
+        private static void CloseAccountHandler(object sender, AccountEventArgs e)
+        {
+            Console.WriteLine(e.Message);
         }
     }
 }
